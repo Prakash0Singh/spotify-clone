@@ -1,0 +1,141 @@
+/* You can add global styles to this file, and also import other style files */
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css");
+@import 'ngx-owl-carousel-o/lib/styles/scss/owl.carousel';
+@import 'ngx-owl-carousel-o/lib/styles/scss/owl.theme.default';
+html, body { height: 100%; }
+body { 
+    margin: 0; 
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+     background-color: #0f0f0ff6;
+    }
+
+
+.show-pointer{
+    cursor: pointer;
+}
+.wrapping-text{
+    width: 225px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.mat-mdc-table{
+    background-color: transparent;
+}
+.mat-mdc-table tbody, .mat-mdc-table tfoot, .mat-mdc-table thead, .mat-mdc-cell, .mat-mdc-footer-cell, .mat-mdc-header-row, .mat-mdc-row, .mat-mdc-footer-row, .mat-mdc-table .mat-mdc-header-cell{
+    color: white;
+}
+
+.mat-mdc-table tr.mat-mdc-row:hover,.mat-mdc-table tr.mat-mdc-row:active{
+  background: rgba(9, 9, 9, 0.15);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  cursor: pointer;
+}
+.on-menu-hover{
+  background: red
+
+}
+
+.more-options{
+  visibility: hidden;
+}
+.mat-mdc-table tr.mat-mdc-row:hover .more-options{
+  visibility: visible;
+}
+.music_playing{
+    background: rgba(9, 9, 9, 0.15)!important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
+    backdrop-filter: blur(0px) !important;
+    -webkit-backdrop-filter: blur(0px) !important; 
+    cursor: pointer;
+    color: #1db954;
+    font-weight: 500;
+}
+.showall:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.cdk-overlay-container{
+    z-index: 1234;
+}
+
+// range bar customization
+/*Chrome*/
+input[type="range"] {
+    accent-color: #1db954;
+  }
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #1db954 #EBE8E8;
+  }
+  
+  /* Chrome, Edge and Safari */
+  *::-webkit-scrollbar {
+    width: 7px;
+    width: 7px;
+  }
+  *::-webkit-scrollbar-track {
+    border-radius: 7px;
+    background-color: transparent;
+  }
+  
+  *::-webkit-scrollbar-track:hover {
+    background-color: transparent;
+  }
+  
+  *::-webkit-scrollbar-track:active {
+    background-color:transparent;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #1db954;
+  }
+  
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: #1db954;
+  }
+  
+  *::-webkit-scrollbar-thumb:active {
+    background-color: #1db954;
+  }
+
+
+.mat-mdc-radio-button .mdc-radio .mdc-radio__native-control:enabled:checked+.mdc-radio__background .mdc-radio__outer-circle,
+.mat-mdc-radio-button .mdc-radio .mdc-radio__native-control:enabled+.mdc-radio__background .mdc-radio__inner-circle
+{
+
+  border-color: #1db954 !important;
+}
+.mat-mdc-raised-button:not(:disabled) {
+  background-color: #1db954 !important;
+}
+
+.mat-mdc-menu-panel.mat-mdc-menu-panel{
+  background-color: #acacacf5 !important;
+}
+
+// .my-loader-class .mat-mdc-dialog-container .mdc-dialog__surface{
+//   background-color: transparent !important;
+// } 
+
+.cdk-overlay-dark-backdrop {
+  background: rgba(0, 0, 0, 0) !important;
+}
+.my-loader-class .mat-mdc-dialog-container .mdc-dialog__surface{
+  box-shadow: none;
+  background: transparent;
+}
+.mat-mdc-dialog-container .mdc-dialog__surface{
+  box-shadow: none;
+  background: transparent;
+}
+
+.cdk-global-overlay-wrapper{
+  justify-content: end !important;
+  align-items: stretch !important;
+}

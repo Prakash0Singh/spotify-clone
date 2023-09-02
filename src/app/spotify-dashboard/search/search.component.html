@@ -1,0 +1,311 @@
+<div class="container" style="height: 90%; overflow-y:scroll;">
+    <div class="row">
+        <div class="col-11 mx-auto">
+            <mat-form-field class="w-100 mt-3">
+                <input #searchSong style="color: white;" matInput type="search" placeholder="Search Here" (keydown.enter)="search(searchSong.value)" >
+              </mat-form-field>
+
+              <div class="radio-toolbar">
+                <input type="radio" id="search_all" name="search" value="search_all" checked (click)="showdata($event.target)">
+                <label for="search_all">All</label>
+            
+                <input type="radio" id="search_albums" name="search" value="search_albums" (click)="showdata($event.target)">
+                <label for="search_albums">Albums</label>
+
+                <input type="radio" id="search_artists" name="search" value="search_artists" (click)="showdata($event.target)">
+                <label for="search_artists">Artists</label>
+                
+                    <input type="radio" id="search_playlists" name="search" value="search_playlists" (click)="showdata($event.target)">
+                    <label for="search_playlists">Playlists</label> 
+
+                <input type="radio" id="search_tracks" name="search" value="search_tracks" (click)="showdata($event.target)">
+                <label for="search_tracks">Tracks</label>
+            </div>
+            
+        </div>
+<ng-container *ngIf="search_data && radio_value=='search_all'">
+        <div class="col-12 mt-3">
+        <div class="row p-0">
+            <div class="col-lg-6">
+                <p class="m-0">Top result</p>
+                <div class=" p-3 mx-auto artist-card d-flex flex-column show-pointer" (click)="router.navigate(['/artists',artists[0]?.id])">
+                    <div  class="d-flex p-2">
+                        <img [src]="(artists[0]?.images?.[0]?.url)?artists[0]?.images?.[0]?.url:_musicService.userImage" alt="artists" style="box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px; height:130px;width: 130px; border-radius: 50%;">
+                    </div>
+                    <div class="ps-0">
+                        <p class=" m-0 fs-2 fw-semibold">{{artists[0]?.name}}</p>
+                        <span class="fs-6 fw-normal text-capitalize type-style px-3 py-1 mx-0 show-pointer">{{artists[0]?.type}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <p class="m-0 ">Top Songs</p>
+                
+                <div class="d-flex" [ngStyle]="{'height':toogle?'260px':'auto','overflow-y':'hidden'}">
+                  <table mat-table [dataSource]="tracks">         
+                      <!-- Track Column -->
+                      <ng-container matColumnDef="Track">
+                        <th mat-header-cell *matHeaderCellDef> Track </th>
+                        <td mat-cell  class=" track-style" [ngClass]="curr_playing==i.id?'music_playing':''" (click)="play_song(i)" *matCellDef="let i">
+                          <div class="d-flex">
+                              <div class="d-flex pe-2">
+                                  <img src={{i.album?.images[2].url}} alt="..." height="35" width="35">
+                              </div>
+                              <div class="d-flex flex-column">
+                                  <p  class=" m-0 d-inline-block showall" (click)="show_track($event,i)">{{i.name}}</p>
+                                  <p class="m-0 d-inline-block  "><span class="showall" (click)="artist_comp($event,art.id)" style="padding-right: 5px; font-size: 10px" *ngFor="let art of i.artists">{{art.name}}</span></p>    
+                              </div>
+                          </div>
+                           </td>
+                      </ng-container>
+                    
+                      <!-- Album Column -->
+                      <ng-container matColumnDef="Album">
+                        <th mat-header-cell *matHeaderCellDef> Album </th>
+                        <td style="max-width: 200px;" [ngClass]="curr_playing==i.id?'music_playing':''"  mat-cell class="" *matCellDef="let i" (click)="play_song(i)"> {{i.album?.name}} </td>
+                      </ng-container>
+                  
+                      <!-- Time Column -->
+                      <ng-container matColumnDef="Time">
+                        <th mat-header-cell *matHeaderCellDef> Time </th>
+                        <td mat-cell *matCellDef="let i" [ngClass]="curr_playing==i.id?'music_playing':''" (click)="play_song(i)"> 
+                          <div class="d-flex" *ngIf="curr_playing==i.id">
+                            <div class="pfp ">
+                              <div class="playing">
+                              <div class="greenline line-1"></div>
+                              <div class="greenline line-2"></div>
+                              <div class="greenline line-3"></div>
+                              <div class="greenline line-4"></div>
+                              <div class="greenline line-5"></div>
+                            </div>
+                          </div>
+                          </div>
+                        </td>
+                      </ng-container>
+                    
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns" style="display: none;"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  </table>
+              </div>
+            </div>
+        </div>
+
+        </div>
+
+        <div class="col-12 mt-3 ">
+            <p class="fs-4 fw-semibold m-0">Albums</p>
+            <owl-carousel-o [options]="customOptions">
+                <ng-template carouselSlide  *ngFor="let i of albums" >
+    
+                  <div class="card d-flex align-items-center m-3 show-pointer" (click)="show_album(i.id)">
+    
+                    <div class="w-75 d-flex justify-content-center mt-3 position-relative music-image">
+                      <img src={{i.images[0].url}} class="img-fluid img-shadow" alt="...">
+    
+                      <div class=" position-absolute bottom-0 end-0 mb-1 me-2 play-button"  >
+                        <button  class="card__btn card__btn-play " *ngIf="i.id!=isAlbum   " (click)="play_playlist($event,i)">
+                          <i class="bi bi-play-fill"></i>
+                        </button>
+        
+                        <button  class="card__btn card__btn-play" *ngIf="i.id==isAlbum && !resume_button " (click)="pause($event)" >
+                          <i class="bi bi-pause-fill"></i>
+                        </button>
+        
+                        <button  class="card__btn card__btn-play" *ngIf=" i.id==isAlbum  && resume_button " (click)="resume($event)" >
+                          <i class="bi bi-play-fill text-warning"></i>
+                        </button>
+                      </div>
+                    
+                  </div>
+                    <div class="" style="overflow: hidden;">
+                        <p class="card-text text-center mt-2 text-wrap mx-2" style="font-size: small;">{{i.name}}</p>
+                    </div>
+                  </div>
+                </ng-template>  
+              </owl-carousel-o>
+        </div>
+        <div class="col-12 mt-3 ">
+            <p class="fs-4 fw-semibold m-0">Playlists</p>
+
+            <owl-carousel-o [options]="customOptions">
+                <ng-template carouselSlide  *ngFor="let i of playlists" >
+                  <div class="card d-flex align-items-center m-3 show-pointer" (click)="show_playlist(i.id)">
+                    <div class="w-75 d-flex justify-content-center mt-3 position-relative music-image">
+                        <img src={{i.images[0].url}} class="img-fluid img-shadow" alt="...">
+    
+                        <div class=" position-absolute bottom-0 end-0 mb-1 me-2 play-button">
+                          <button  class="card__btn card__btn-play " (click)="play_playlist($event,i)">
+                            <i class="bi bi-play-fill"></i>
+                          </button>
+                      </div>
+                    </div>
+                    <div class="" style="overflow: hidden;">
+                        <p class="card-text text-center mt-2 text-wrap mx-2" style="font-size: small;">{{i.name}}</p>
+                    </div>
+                  </div>
+                </ng-template>  
+              </owl-carousel-o>
+        </div>
+        <div class="col-12 mt-3">
+            <p class="fs-4 fw-semibold m-0">Artists</p>
+            <owl-carousel-o [options]="customOptions">
+                <ng-template carouselSlide  *ngFor="let i of artists" >
+                  <div class="card d-flex align-items-center m-3 show-pointer other-artists" (click)="show_artists($event,i)">
+    
+                    <div class="w-75 d-flex justify-content-center mt-3 position-relative music-image">
+                        <img [src]="(i.images[0]?.url)?i.images[0]?.url:_musicService.defaultImage" class="img-fluid img-shadow" alt="..." style="height: 120px; border-radius: 50%;">
+                    </div>
+                    <div class="" style="overflow: hidden;">
+                        <p class="card-text mt-2 mb-0 text-wrap mx-2" style="font-size: small;">{{i.name}}</p>
+                        <p class=" text-capitalize text-center" style=" font-size: 12px;color: rgba(255, 255, 255, 0.658);">{{i.type}}</p>
+
+                    </div>
+                  </div>
+                </ng-template>
+
+              </owl-carousel-o>
+        </div>
+</ng-container>
+
+ <ng-container *ngIf="search_data && radio_value=='search_albums'" >
+    <div class="col-12">
+        <div class="conatiner d-flex justify-content-center flex-wrap">
+        <div class="d-flex" *ngFor="let i of albums">
+        <div class="card d-flex align-items-center m-3 show-pointer" (click)="show_album(i.id)">
+          <div class="w-75 d-flex justify-content-center mt-3 position-relative music-image">
+              <img src={{i.images[0].url}} class="img-fluid img-shadow" alt="...">
+              <div class=" position-absolute bottom-0 end-0 mb-1 me-2 play-button">
+                <button  class="card__btn card__btn-play " *ngIf="i.id!=isAlbum   " (click)="play_playlist($event,i)">
+                  <i class="bi bi-play-fill"></i>
+                </button>
+
+                <button  class="card__btn card__btn-play" *ngIf="i.id==isAlbum && !resume_button " (click)="pause($event)" >
+                  <i class="bi bi-pause-fill"></i>
+                </button>
+
+                <button  class="card__btn card__btn-play" *ngIf=" i.id==isAlbum  && resume_button " (click)="resume($event)" >
+                  <i class="bi bi-play-fill text-warning"></i>
+                </button>
+             
+              </div>
+          </div>
+          <div class="" style="overflow: hidden;">
+              <p class="card-text text-center mt-2 text-wrap mx-2" style="font-size: small;">{{i.name}}</p>
+          </div>
+        </div>
+    </div> 
+ </div> 
+    </div>
+ </ng-container>
+
+ <ng-container *ngIf="search_data && radio_value=='search_artists'" >
+    <div class="col-12">
+
+        <div class="conatiner d-flex justify-content-center flex-wrap">
+
+            <div class="d-flex" *ngFor="let i of artists">
+                  <div class="card d-flex align-items-center m-3 show-pointer" (click)="show_artists($event,i)">
+                    <div class="w-75 d-flex justify-content-center mt-3 position-relative music-image">
+                        <img [src]="(i.images[0]?.url)?i.images[0]?.url:_musicService.userImage" class="img-fluid img-shadow" alt="..." style="height: 120px; width: 120px; border-radius: 50%;">
+                       
+                    </div>
+                    <div class="" style="overflow: hidden;">
+                      <p class="card-text mt-2 mb-0 text-wrap mx-2 " style="font-size:medium;">{{i.name}}</p>
+                      <p class=" text-capitalize text-center" style=" font-size: 12px;color: rgba(255, 255, 255, 0.658);">{{i.type}}</p>
+                  </div>
+                  </div>
+            </div> 
+      
+      </div>
+
+    </div>
+
+ </ng-container>
+ <ng-container *ngIf="search_data && radio_value=='search_playlists'" >
+    <div class="col-12">
+        <div class="conatiner d-flex justify-content-center flex-wrap">
+            <div class="d-flex" *ngFor="let i of playlists">
+            <div class="card d-flex align-items-center m-3 show-pointer" (click)="show_playlist(i.id)">
+              <div class="w-75 d-flex justify-content-center mt-3 position-relative music-image">
+                  <img src={{i.images[0].url}} class="img-fluid img-shadow" alt="...">
+                  <div class=" position-absolute bottom-0 end-0 mb-1 me-2 play-button">
+                    <button  class="card__btn card__btn-play " (click)="play_playlist($event,i)">
+                      <i class="bi bi-play-fill"></i>
+                    </button>
+                </div>
+              </div>
+              <div class="" style="overflow: hidden;">
+                  <p class="card-text text-center mt-2 text-wrap mx-2" style="font-size: small;">{{i.name}}</p>
+              </div>
+            </div>
+        </div> 
+     </div> 
+    </div>
+
+ </ng-container>
+
+ <ng-container *ngIf="search_data && radio_value=='search_tracks'" >
+    <div class="col-12 my-3">
+      <table mat-table [dataSource]="trackSource" >
+          
+        <!-- Position Column -->
+        <ng-container matColumnDef="#">
+          <th mat-header-cell style="padding: 0 0 0 20px;"  *matHeaderCellDef>#</th>
+          <td  mat-cell style="padding: 0 0 0 20px;" [ngClass]="curr_playing==i.id?'music_playing':''" *matCellDef="let i ;let in=index" (click)="play_song(i)"> 
+            <div class="d-flex" *ngIf="(curr_playing==i.id )">
+              <div class="pfp ">
+                <div class="playing">
+                <div class="greenline line-1"></div>
+                <div class="greenline line-2"></div>
+                <div class="greenline line-3"></div>
+                <div class="greenline line-4"></div>
+                <div class="greenline line-5"></div>
+              </div>
+            </div>
+            </div>
+            <div class="d-flex " *ngIf="!(curr_playing==i?.id )">
+              {{in+1}}
+            </div>
+           </td>
+        </ng-container>
+      
+        <!-- Track Column -->
+        <ng-container matColumnDef="Track">
+          <th mat-header-cell *matHeaderCellDef> Track </th>
+          <td mat-cell  class="track-style" [ngClass]="curr_playing==i.id?'music_playing':''" (click)="play_song(i)" *matCellDef="let i">
+            <div class="d-flex">
+              <div class="d-flex pe-2">
+                <img src={{i.album?.images[2].url}} alt="..." height="35" width="35">
+            </div>
+              <div class="d-flex flex-column">
+                    <p  class="wrapping-text m-0 d-inline-block showall" (click)="show_track($event,i)" >{{i.name}}</p>
+                    <p class="m-0 d-inline-block "><span class="showall" (click)="artist_comp($event,art)" style="padding-right: 5px; font-size: 10px" *ngFor="let art of i.artists">{{art.name}}</span></p>    
+                </div>
+            </div>
+             </td>
+        </ng-container>
+      
+        <!-- Time Column -->
+        <ng-container matColumnDef="Time">
+          <th mat-header-cell *matHeaderCellDef> Time </th>
+          <td mat-cell *matCellDef="let i;let index=index" [ngClass]="(curr_playing==i.id)?'music_playing':''" (click)="play_song(i)">
+            <div class="d-flex">
+
+              <span>{{i.duration_ms/60000|number:'1.2-2'}}</span>
+              <span mat-button class="ps-3 more-options" [matMenuTriggerFor]="menu"(menuClosed)="menuClosed()" [matMenuTriggerFor]="menu" (menuOpened)="changeTableRowColor(index)" (click)="menuOption($event)"><i class="bi bi-three-dots-vertical" ></i> </span>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item class="" (click)="add_track_playlist(i)">Add to playlist</button>
+              <button mat-menu-item class="" (click)="add_track_queue(i)">Add to queue</button>
+            </mat-menu>
+            
+          </div>
+          </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" style="display: none;"></tr>
+        <tr mat-row *matRowDef="let row;let index=index columns: displayedColumns;" [style.background-color]="rowClicked == index ? '#09090926' : '' "></tr>
+      </table>
+    </div>
+ </ng-container>
+    </div>
+</div>

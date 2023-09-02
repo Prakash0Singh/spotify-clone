@@ -1,0 +1,139 @@
+.play-button{
+  display: none;
+}
+
+.music-image:hover .play-button{
+  display: block;
+}
+
+.play-button:hover{
+  cursor: pointer;
+}
+
+.glass-card
+{
+padding: 5px;
+background: rgba(255, 255, 255, 0.09);
+border-radius: 1px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(0px);
+-webkit-backdrop-filter: blur(0px);
+}
+.card__wrapper {
+    display: inline-block;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.card__btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+
+.card__btn-play {
+    width: 40px;
+    height: 40px;
+    background: var(--main-color);
+    border-radius: 50%;
+    display: flex;
+    background-color: #1db954;
+    justify-content: center;
+    align-items: center;
+}
+
+.pfp {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  
+  .playing {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    gap: 1px;
+    width: 30px;
+    height: 20px;
+  }
+  
+  .greenline {
+    background-color: #1db954;
+    height: 20px;
+    width: 10px;
+    position: relative;
+    transform-origin: bottom;
+  }
+  
+  .line-1 {
+    animation: infinite playing 1s ease-in-out;
+    animation-delay: 0.2s;
+  }
+  
+  .line-2 {
+    animation: infinite playing 1s ease-in-out;
+    animation-delay: 0.5s;
+  }
+  
+  .line-3 {
+    animation: infinite playing 1s ease-in-out;
+    animation-delay: 0.6s;
+  }
+  
+  .line-4 {
+    animation: infinite playing 1s ease-in-out;
+    animation-delay: 0s;
+  }
+  
+  .line-5 {
+    animation: infinite playing 1s ease-in-out;
+    animation-delay: 0.4s;
+  }
+
+
+//   recommended Artists
+.card{
+    border: none;
+    background-color: #181818;
+    color: white;
+    width: 11rem;
+    height: 12rem;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  }
+
+ .card:hover {
+    background-color:#4d4b4b21
+  } 
+  
+  .music-image img{
+    // box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 48px;
+    // box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  }
+  .music-image:hover  .play-button{
+    display: block;
+}
+.play-button:hover{
+    cursor: pointer;
+}
+  @keyframes playing {
+    0% {
+      transform: scaleY(0.1);
+    }
+  
+    33% {
+      transform: scaleY(0.6);
+    }
+  
+    66% {
+      transform: scaleY(0.9);
+    }
+  
+    100% {
+      transform: scaleY(0.1);
+    }
+  }
+
+  

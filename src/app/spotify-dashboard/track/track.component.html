@@ -1,0 +1,233 @@
+<div #scrollup class="conatiner" style="height:90%; overflow-y: scroll;">
+    <div class="row">
+        <div class="col-12 d-flex">
+            <div class="m-4 d-flex justify-content-center mt-3 position-relative music-image">
+                <img src={{data?.album?.images[0]?.url}} alt="Song-cover" style="max-height: 250px; max-width: 250px; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+
+                <div class=" position-absolute bottom-0 end-0 mb-1 me-2 ">
+                  <button  class="card__btn card__btn-play " *ngIf="data.id!=curr_playing   " (click)="play_song($event,data)">
+                    <i class="bi bi-play-fill"></i>
+                  </button>
+                  <button  class="card__btn card__btn-play" *ngIf="data.id==curr_playing && !resume_button " (click)="pause($event)" >
+                    <i class="bi bi-pause-fill"></i>
+                  </button>
+                  <button  class="card__btn card__btn-play" *ngIf=" data.id==curr_playing  && resume_button " (click)="resume($event)" >
+                    <i class="bi bi-play-fill text-warning"></i>
+                  </button>
+              </div>
+            </div>
+            <div class=" p-4 ps-0 d-flex w-100 flex-column justify-content-end">
+                <p class="text-capitalize m-0">{{data?.type}}</p>
+                <p class=" m-0 fs-2 fw-semibold">{{data?.name}}</p>
+                <small style="font-size: 12px;" >
+                    <span class="me-2 showall" (click)="show_artists(data?.artists[0]?.id)" >{{data?.artists?.[0]?.name}}</span>|
+                    <span class="me-2 showall" (click)="show_album(data?.album?.id)">{{data?.album?.name}}</span> | 
+                    <span class="me-2 ">{{data?.album?.release_date}}</span>
+                </small>
+            </div>
+        </div>
+
+        <div class="col-11 mx-auto">
+            <div class="d-flex gap-3 p-3 artist-card" *ngFor="let i of artists_data" (click)="show_artists(i.id)">
+                <div class="d-flex">
+                    
+                    <img [src]="(i.images?.[2]?.url)?i.images?.[2]?.url:_musicService.defaultProfile" alt="artists-image" height="75px" style="border-radius: 50%; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+                </div>
+                <div class="d-flex flex-column justify-content-evenly">
+                    <small class="text-capitalize">{{i.type}}</small>
+                    <p class="m-0 showall">{{i.name}}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-11 mx-auto my-3">
+          <p class="m-0">Popular Tracks by {{data?.artists?.[0]?.name}}</p>
+
+          <div class="d-flex" [ngStyle]="{'height':toogle?'260px':'auto','overflow-y':'hidden'}">
+              <table mat-table [dataSource]="topTrack">
+        
+                  <!-- Position Column -->
+                  <ng-container matColumnDef="#">
+                    <th mat-header-cell   *matHeaderCellDef>#</th>
+                    <td  mat-cell  [ngClass]="curr_playing==i.id?'music_playing':''" *matCellDef="let i ;let in=index" (click)="play_song($event,i)"> 
+                      <div class="d-flex" *ngIf="curr_playing==i.id">
+                        <div class="pfp ">
+                          <div class="playing">
+                          <div class="greenline line-1"></div>
+                          <div class="greenline line-2"></div>
+                          <div class="greenline line-3"></div>
+                          <div class="greenline line-4"></div>
+                          <div class="greenline line-5"></div>
+                        </div>
+                      </div>
+                      </div>
+                      <div class="d-flex " *ngIf="curr_playing!=i.id">
+                        {{in+1}}
+                      </div>
+                     </td>
+                  </ng-container>
+                
+                  <!-- Track Column -->
+                  <ng-container matColumnDef="Track">
+                    <th mat-header-cell *matHeaderCellDef> Track </th>
+                    <td mat-cell  class=" track-style" [ngClass]="curr_playing==i.id?'music_playing':''" (click)="play_song($event,i)" *matCellDef="let i">
+                      <div class="d-flex">
+                          <div class="d-flex pe-2">
+                              <img src={{i.album?.images[2].url}} alt="..." height="35" width="35">
+                          </div>
+                          <div class="d-flex flex-column">
+                              <p  class=" m-0 d-inline-block showall" (click)="show_track($event,i.id)">{{i.name}}</p>
+                              <p class="m-0 d-inline-block  "><span class="showall" (click)="artist_comp($event,art.id)" style="padding-right: 5px; font-size: 10px" *ngFor="let art of i.artists">{{art.name}}</span></p>    
+                          </div>
+                      </div>
+                       </td>
+                  </ng-container>
+                
+                  <!-- Album Column -->
+                  <ng-container matColumnDef="Album">
+                    <th mat-header-cell *matHeaderCellDef> Album </th>
+                    <td style="max-width: 200px;" [ngClass]="curr_playing==i.id?'music_playing':''"  mat-cell class="" *matCellDef="let i" (click)="play_song($event,i)"> {{i.album?.name}} </td>
+                  </ng-container>
+      
+                  <!-- Popularity -->
+                  <ng-container matColumnDef="Popularity">
+                      <th mat-header-cell *matHeaderCellDef> Popularity </th>
+                      <td mat-cell  *matCellDef="let i" [ngClass]="curr_playing==i.id?'music_playing':''" (click)="play_song($event,i)"> {{i.popularity}}% </td>
+                    </ng-container>
+                
+                  <!-- Time Column -->
+                  <ng-container matColumnDef="Time">
+                    <th mat-header-cell *matHeaderCellDef> Time </th>
+                    <td mat-cell *matCellDef="let i;let index=index" [ngClass]="curr_playing==i.id?'music_playing':''" (click)="play_song($event,i)"> 
+                    <div class="d-flex">
+                    <span>{{i.duration_ms/60000|number:'1.2-2'}}</span>
+                    <button mat-button class="ps-3 more-options" [matMenuTriggerFor]="menu" (menuClosed)="menuClosed()" [matMenuTriggerFor]="menu" (menuOpened)="changeTableRowColor(index)" (click)="menuOption($event)"><i class="bi bi-three-dots-vertical" ></i> </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item class="" (click)="add_track_playlist(i)">Add to playlist</button>
+                      <button mat-menu-item class="" (click)="add_track_queue(i)">Add to queue</button>
+                    </mat-menu>
+                    </div>
+                    </td>
+                  </ng-container>
+                
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row;let index=index; columns: displayedColumns;" [style.background-color]="rowClicked == index ? '#09090926' : '' "></tr>
+              </table>
+          </div>
+          <small class="showall" (click)="toogle=!toogle">{{toogle?'See more':'See Less'}}</small>
+        </div>
+
+        <div class="col-11 mx-auto my-3 d-flex flex-column" *ngFor="let q of artists_data;let index=index"  >
+
+            <div class="d-flex  justify-content-between w-100 ">
+                <p class="m-0 fs-4 fw-semibold d-inline-block"> Popular Releases by {{q.name}}</p>
+                <p class="m-0 fs-5 showall d-inline-block" (click)="more_albums(q.id)"> Show All</p>
+            </div>
+
+            <div class="" >
+                <owl-carousel-o [options]="customOptions">
+                    <ng-template carouselSlide  *ngFor="let i of artists_albumData[index]" >
+        
+                      <div class="card d-flex align-items-center m-3 show-pointer" (click)="show_album(i.id)">
+        
+                        <div class="w-75 d-flex justify-content-center mt-3 position-relative music-image">
+                            <img src={{i.images[1].url}} class="img-fluid img-shadow" alt="...">
+        
+                            <div class=" position-absolute bottom-0 end-0 mb-1 me-2 play-button" *ngIf="play_button_show || i.id!=albumid"   >
+                                 <button  class="card__btn card__btn-play " *ngIf="i.id!=isAlbum   " (click)="play_album($event,i)">
+                        <i class="bi bi-play-fill"></i>
+                      </button>
+
+                      <button  class="card__btn card__btn-play" *ngIf="i.id==isAlbum && !resume_button " (click)="pause($event)" >
+                        <i class="bi bi-pause-fill"></i>
+                      </button>
+
+                      <button  class="card__btn card__btn-play" *ngIf=" i.id==isAlbum  && resume_button " (click)="resume($event)" >
+                        <i class="bi bi-play-fill text-warning"></i>
+                      </button>
+                              
+                            </div>
+                        </div>
+                        <div class="" style="overflow: hidden;">
+                            <p class="card-text text-center mt-2 text-wrap mx-2" style="font-size: small;">{{i.name}}</p>
+                        </div>
+                      </div>
+                    </ng-template>  
+                  </owl-carousel-o>
+
+            </div>
+        </div>
+
+        <div class="col-11 mx-auto my-3">
+
+        <div class="d-flex gap-3 ablum-card p-3">
+            <div class="d-flex">
+                <img src="{{album_data?.images?.[1]?.url}}" alt="album-image" height="75px" style=" box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+            </div>
+            <div class="d-flex flex-column justify-content-evenly">
+                <small class="text-capitalize">From the album</small>
+                <p class="m-0 showall" (click)="show_album(album_data?.id)">{{album_data?.name}}</p>
+            </div>
+        </div>
+
+            <table mat-table [dataSource]="dataSource">
+          
+                <!-- Position Column -->
+                <ng-container matColumnDef="#">
+                  <th mat-header-cell style="padding: 0 0 0 20px;"  *matHeaderCellDef>#</th>
+                  <td  mat-cell style="padding: 0 0 0 20px;" [ngClass]="curr_playing==i.id?'music_playing':''" *matCellDef="let i ;let in=index" (click)="play_song($event,i)"> 
+                    <div class="d-flex" *ngIf="curr_playing==i.id">
+                      <div class="pfp ">
+                        <div class="playing">
+                        <div class="greenline line-1"></div>
+                        <div class="greenline line-2"></div>
+                        <div class="greenline line-3"></div>
+                        <div class="greenline line-4"></div>
+                        <div class="greenline line-5"></div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="d-flex " *ngIf="!(curr_playing==i?.id )">
+                      {{in+1}}
+                    </div>
+                   </td>
+                </ng-container>
+              
+                <!-- Track Column -->
+                <ng-container matColumnDef="Track">
+                  <th mat-header-cell *matHeaderCellDef> Track </th>
+                  <td mat-cell  class="track-style" [ngClass]="curr_playing==i.id?'music_playing':''" (click)="play_song($event,i)" *matCellDef="let i">
+                    <div class="d-flex">
+                        <!-- <div class="d-flex pe-2">
+                            <img src={{i.album?.images[2].url}} alt="..." height="35" width="35">
+                        </div> -->
+                        <div class="d-flex flex-column">
+                            <p  class="wrapping-text m-0 d-inline-block showall" (click)="show_track($event,i.id)" >{{i.name}}</p>
+                            <p class="m-0 d-inline-block "><span class="showall" (click)="artist_comp($event,art.id)" style="padding-right: 5px; font-size: 10px" *ngFor="let art of i.artists">{{art.name}}</span></p>    
+                        </div>
+                    </div>
+                     </td>
+                </ng-container>
+              
+                <!-- Time Column -->
+                <ng-container matColumnDef="Time">
+                  <th mat-header-cell *matHeaderCellDef> Time </th>
+                  <td mat-cell *matCellDef="let i;let index=index" [ngClass]="curr_playing==i.id?'music_playing':''" (click)="play_song($event,i)"> 
+                    <div class="d-flex">
+                    <span>{{i.duration_ms/60000|number:'1.2-2'}}</span>
+                    <button mat-button class="ps-3 more-options " [matMenuTriggerFor]="menu" (menuClosed)="menuClosed()" [matMenuTriggerFor]="menu" (menuOpened)="changeTableRowColor(index)" (click)="menuOption($event)"><i class="bi bi-three-dots-vertical" ></i> </button>
+                    <mat-menu #menu="matMenu">
+                      <span mat-menu-item class="" (click)="add_track_playlist(i)">Add to playlist</span>
+                      <span mat-menu-item class="" (click)="add_track_queue(i)">Add to queue</span>
+                    </mat-menu>
+                    </div>
+                   </td>
+                </ng-container>
+              
+                <tr mat-header-row *matHeaderRowDef="displayedColumns" style="display: none;"></tr>
+                <tr mat-row *matRowDef="let row;let index=index columns: displayedColumns;" [style.background-color]="rowClicked == index ? '#09090926' : '' "></tr>
+              </table>
+        </div>
+
+    </div>
+</div>

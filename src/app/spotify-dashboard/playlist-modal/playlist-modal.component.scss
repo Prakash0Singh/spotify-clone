@@ -1,0 +1,22 @@
+.conatainer{
+    color: white;
+    // background-image: linear-gradient(to right bottom, #958f88, #79716f, #5b5657, #3e3c3d, #242424);
+    background-color: #000000e0;
+}
+.user-playlist:hover{
+    background-color:#e1d8d82e;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+.loader-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(5, 5, 5, 0.21);
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(2.4px);
+-webkit-backdrop-filter: blur(2.4px);
+}
+::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface{
+    box-shadow: none;
+    background: transparent;
+  }

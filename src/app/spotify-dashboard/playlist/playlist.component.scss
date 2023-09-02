@@ -1,0 +1,110 @@
+
+
+
+.card__wrapper {
+    display: inline-block;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.card__btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+
+.card__btn-play {
+    width: 40px;
+    height: 40px;
+    background: var(--main-color);
+    border-radius: 50%;
+    display: flex;
+    background-color: #1db954;
+    justify-content: center;
+    align-items: center;
+}
+
+.pfp {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  
+  .playing {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    gap: 1px;
+    width: 30px;
+    height: 20px;
+  }
+  
+  .greenline {
+    background-color: #1db954;
+    height: 20px;
+    width: 10px;
+    position: relative;
+    transform-origin: bottom;
+  }
+  
+  .line-1 {
+    animation: infinite playing 1s ease-in-out;
+    animation-delay: 0.2s;
+  }
+  
+  .line-2 {
+    animation: infinite playing 1s ease-in-out;
+    animation-delay: 0.5s;
+  }
+  
+  .line-3 {
+    animation: infinite playing 1s ease-in-out;
+    animation-delay: 0.6s;
+  }
+  
+  .line-4 {
+    animation: infinite playing 1s ease-in-out;
+    animation-delay: 0s;
+  }
+  
+  .line-5 {
+    animation: infinite playing 1s ease-in-out;
+    animation-delay: 0.4s;
+  }
+  
+
+  @keyframes playing {
+    0% {
+      transform: scaleY(0.1);
+    }
+  
+    33% {
+      transform: scaleY(0.6);
+    }
+  
+    66% {
+      transform: scaleY(0.9);
+    }
+  
+    100% {
+      transform: scaleY(0.1);
+    }
+  }
+
+.search-input{
+
+    background: rgba(12, 12, 12, 0.28);
+    border: none;
+    padding: 10px;
+    color: white;
+    width: 350px;
+    }
+.search-input:focus {
+  outline: none;
+}
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.375);
+  padding-left: 4px;
+}

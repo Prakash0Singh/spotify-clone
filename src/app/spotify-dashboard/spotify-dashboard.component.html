@@ -1,0 +1,153 @@
+<div class="container-fluid">
+    <div class="row position-relative">
+      <div class="col-3 p-0" style="height: 100vh ;background-color: #242424; color: #ffffff; border: 7px solid black;">
+        <div class=" pt-3  " style="background-color:#181818; border: 5px solid black;">
+          <ul type="none" class="p-0 ps-3">
+            <li class="pb-2 show-pointer" (click)="router.navigate([''])"><i class="fs-4 bi bi-house-door-fill"></i> <span class="fw-medium ps-3">Home</span></li>
+            <li class="pb-1 show-pointer" (click)="router.navigate(['search'])"><i class=" fs-4 bi bi-search "></i> <span class="fw-medium ps-3">Search</span></li>
+          </ul>
+        </div>
+        <div class="pb-3"  style="background-color:#181818; border: 5px solid black;" >
+        <div class="pt-3 ps-3">
+          <i class="bi bi-collection" ></i> <span class="ps-3">Your Library</span> 
+          <span class="float-end" matTooltip="Create Playlist" matTooltipPosition="above">
+            <i class="bi bi-plus-lg  pe-3 show-pointer"  (click)="createPlaylist()"></i>
+          </span>
+        </div>
+        <div class="d-flex pt-3 ps-3">
+          <input type="radio" name="library" id="all" checked (click)="clearoption($event)" >
+            <label for="all"> <i class="bi bi-x-lg pe-3 show-pointer" *ngIf="show" ></i></label>
+          <div class="radio-style">
+            <input type="radio" name="library" id="playlist" (click)="radio_Value($event)" >
+            <label for="playlist" *ngIf="playlist_boolean" >Playlist</label>
+            <input type="radio" name="library" id="artists" (click)="radio_Value($event)" >
+            <label for="artists" *ngIf="artist_boolean" >Artists</label>
+            <input type="radio" name="library" id="albums" (click)="radio_Value($event)" >
+            <label for="albums" *ngIf="albums_boolean" >Albums</label>
+          </div>
+        </div>
+        <div class="d-flex flex-column pt-3 " style="height: 420px; overflow-y: scroll; overflow-x: hidden;">
+<ng-container *ngIf="albums_boolean">
+  
+  <div class="w-100 m-1 d-flex px-3  align-items-center" *ngFor="let i of userSavedAlbum" (click)="router.navigate(['/album',i.album?.id])">
+    <img src="{{i.album?.images[2].url}}" class="show-pointer" alt="artists" height="40">
+    <span style="font-size: 12px;" class="px-2 showall">{{i.album?.name}}</span>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="artist_boolean" >
+    <div class="w-100 m-1 d-flex px-3  align-items-center" *ngFor="let i of followed_artist" (click)="router.navigate(['/artists',i.id])">
+    <img src="{{i.images[2].url}}" class="show-pointer" alt="artists" height="40">
+    <span style="font-size: 12px;" class="px-2 showall">{{i.name}}</span>
+  </div>
+</ng-container>
+
+<ng-container  *ngIf="playlist_boolean">
+  <div class="w-100 m-1 d-flex px-3  align-items-center" *ngFor="let i of userSavedPlaylist" (click)="router.navigate(['/playlist',i.id])">
+    <img [src]="(i?.images?.[0]?.url)?i?.images?.[0]?.url:_musicService.defaultPlaylist" class="show-pointer" alt="artists" height="40">
+    <span style="font-size: 12px;" class="px-2 showall">{{i.name}}</span>
+  </div>
+</ng-container>
+        </div>
+        </div>
+      </div>
+      <div class="col-9 p-0" style="height: 100vh;background-color: #242424; border: 7px solid black;">
+        <router-outlet></router-outlet>
+      </div>
+      <div class="position-absolute bottom-0 w-100 p-0" style=" z-index: 99; background-color: #181818;" >
+
+          <div class="d-flex ">
+            <div class="d-flex justify-content-center align-items-center track-info">
+
+              <div class="pfp" style="background-image: url({{current_track_info?.album?.images?.[0]?.url}});background-size:cover">
+                <div class="playing">
+                <div class="greenline line-1"></div>
+                <div class="greenline line-2"></div>
+                <div class="greenline line-3"></div>
+                <div class="greenline line-4"></div>
+                <div class="greenline line-5"></div>
+              </div>
+            </div>
+            <div class="d-flex flex-column ps-3">
+              <p class="title-1 m-0 wrapping-text showall" (click)="track_info(current_track_info?.id)">{{current_track_info?.name}}</p>
+              <small class="wrapping-text"><span class="showall" style="padding-right: 5px; font-size: 10px" *ngFor="let i of current_track_info?.artists" (click)="artists_info(i)" >{{i?.name}},</span></small>
+            </div>
+
+          </div>
+            <div class="music w-100">
+              <div class="card__wrapper">
+                <!-- <button class="card__btn float-start" (click)="track_queue()" >
+                  <i class="bi bi-chevron-double-up text-light"></i>
+                </button> -->
+
+                <button class="card__btn" (click)="previous_music()"><svg width="15" height="15" viewBox="0 0 23 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.5 8V0L0 8L11.5 16V8ZM23 0L11.5 8L23 16V0Z" fill="#fff"></path></svg></button>
+                <button *ngIf="play_button_show" class="card__btn card__btn-play" (click)="play_music()" >
+                  <i class="bi bi-play-fill"></i>
+                </button>
+                <button *ngIf="!play_button_show"  class="card__btn card__btn-play"  (click)="pauser_music()" >
+                  <i class="bi bi-pause-fill"></i>
+                </button>
+                <button class="card__btn" (click)="next_music()">
+                  <svg width="15" height="15" viewBox="0 0 23 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.5 8V0L23 8L11.5 16V8ZM0 0L11.5 8L0 16V0Z" fill="#fff"></path></svg>
+                </button>
+                <button class="card__btn" (click)="suffle()" >
+                  <i class="bi bi-shuffle text-light"></i>
+                </button>
+            </div>
+              <div class="card__wrapper">
+                  <div class="card__time card__time-passed">{{this.playback?.progress_ms/60000|number:'1.2-2'}}</div>
+
+                  <!-- <div class="progress w-100" style="--bs-progress-height: .5rem;--bs-progress-bar-bg:#1db954;background-color:#ebe8e838" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"> -->
+                    <!-- <div class="progress-bar" [style.width]="getSongProgress()"></div> -->
+                  <!-- </div> -->
+                  <!-- <p class="w-100" ><ngb-progressbar style="--bs-progress-height: .5rem;--bs-progress-bar-bg:#1db954;background-color:#ebe8e838"  class="w-100" type="success"   [value]="getSongProgress()" [animated]="true"  #value (click)="music_progress_bar(value.value)" [max]="100"></ngb-progressbar></p> -->
+               
+                  <div class="card__timeline"><input type="range" [value]="p"  (input)="music_progress_bar($event)" [max]="this.playback?.item?.duration_ms" min="0" class="w-100"></div>
+
+                  <div class="card__time card__time-left">{{this.playback?.item?.duration_ms/60000|number:'1.2-2'}}</div>
+              </div>
+          </div>
+          <div class="d-flex px-3">
+            <label class="slider">
+              <input type="range" class="level"[value]="volume" max="100" (input)="change_volume($event)">
+              <svg class="volume" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve">
+                  <g>
+                      <path d="M18.36 19.36a1 1 0 0 1-.705-1.71C19.167 16.148 20 14.142 20 12s-.833-4.148-2.345-5.65a1 1 0 1 1 1.41-1.419C20.958 6.812 22 9.322 22 12s-1.042 5.188-2.935 7.069a.997.997 0 0 1-.705.291z" fill="currentColor" data-original="#000000"></path>
+                      <path d="M15.53 16.53a.999.999 0 0 1-.703-1.711C15.572 14.082 16 13.054 16 12s-.428-2.082-1.173-2.819a1 1 0 1 1 1.406-1.422A6 6 0 0 1 18 12a6 6 0 0 1-1.767 4.241.996.996 0 0 1-.703.289zM12 22a1 1 0 0 1-.707-.293L6.586 17H4c-1.103 0-2-.897-2-2V9c0-1.103.897-2 2-2h2.586l4.707-4.707A.998.998 0 0 1 13 3v18a1 1 0 0 1-1 1z" fill="currentColor" data-original="#000000"></path>
+                  </g>
+              </svg>
+          </label>
+          </div>
+
+        </div>
+    </div>
+    </div>
+  </div>
+  
+  <ng-template let-data #myCityDialog>
+    <div class="p-5">
+          <form #contactForm="ngForm" (ngSubmit)="onSubmit(contactForm)" >
+              <mat-form-field class="w-100">
+                  <mat-label>Playlist</mat-label>
+                  <input matInput placeholder="Playlist Name" name="name" ngModel >
+              </mat-form-field>
+              
+                <mat-form-field class="w-100">
+                  <mat-label>Description</mat-label>
+                  <input matInput placeholder="Playlist description" name="description" ngModel >
+              </mat-form-field>
+              <div class="w-100 d-flex justify-content-between">
+                  <div class="d-flex">
+                    <mat-radio-group aria-label="Select an option"  >
+                      <mat-radio-button name="public"  value="false" ngModel>Private</mat-radio-button>
+                      <mat-radio-button name="public"  value="true" ngModel>Public</mat-radio-button>
+                  </mat-radio-group>
+                  </div>
+                  <div class="d-flex">
+                      <button type="submit" mat-raised-button>Create</button>
+                  </div>
+              </div>
+        
+          </form>
+        </div>
+  </ng-template> 

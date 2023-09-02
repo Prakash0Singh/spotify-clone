@@ -1,0 +1,71 @@
+<div class="conatiner d-flex justify-content-center flex-wrap" style="height:90%; overflow: scroll;">
+  <ng-container *ngIf="id!='exploremore'">
+    <div class="d-flex" *ngFor="let i of collection">
+          <div class="card d-flex align-items-center m-3 show-pointer" (click)="show_more_data($event,i.id)">
+            <div class="w-75 d-flex justify-content-center mt-3 position-relative music-image">
+                <img src={{i.images[0].url}} class="img-fluid img-shadow" alt="...">
+                <div class=" position-absolute bottom-0 end-0 mb-1 me-2 play-button" *ngIf="play_button_show || i.id!=item_id"   >
+                  <button  class="card__btn card__btn-play " (click)="play_album($event,i)" *ngIf="id=='newreleases'">
+                    <i class="bi bi-play-fill"></i>
+                  </button>
+                  <button  class="card__btn card__btn-play " (click)="play_playlist($event,i)" *ngIf="id=='editorpicks'">
+                    <i class="bi bi-play-fill"></i>
+                  </button>
+              </div>
+                <div class="position-absolute bottom-0 end-0 mb-1 me-2 " *ngIf="!play_button_show && i.id==item_id" >
+                  <button  class="card__btn card__btn-play" (click)="pause_music($event)">
+                    <i class="bi bi-pause-fill"></i>
+                  </button>
+                </div>
+            </div>
+            <div class="" style="overflow: hidden;">
+                <p class="card-text text-center mt-2 text-wrap mx-2" style="font-size: small;">{{i.name}}</p>
+            </div>
+          </div>
+    </div> 
+  </ng-container>
+
+    <ng-container *ngIf="id=='exploremore'|| id=='recent_tracks'">
+    <div class="d-flex" *ngFor="let i of exploretracks">
+      <div class="card d-flex align-items-center m-3 show-pointer" (click)="show_more_data($event,i.id)">
+        <div class="w-75 d-flex justify-content-center mt-3 position-relative music-image">
+            <img src={{i.album?.images[0].url}} class="img-fluid img-shadow" alt="...">
+            <div class=" position-absolute bottom-0 end-0 mb-1 me-2 play-button"  >
+              <button  class="card__btn card__btn-play " *ngIf="i.id!=curr_playing   " (click)="play_explore($event,i)" >
+                <i class="bi bi-play-fill"></i>
+              </button>
+              <button  class="card__btn card__btn-play" *ngIf=" i.id==curr_playing && !resume_button  " (click)="pause_music($event)">
+                <i class="bi bi-pause-fill"></i>
+              </button>
+
+              <button  class="card__btn card__btn-play" *ngIf="i.id==curr_playing  && resume_button " (click)="resume($event)" >
+                <i class="bi bi-play-fill text-warning"></i>
+              </button>
+          </div>
+        </div>
+        <div class="" style="overflow: hidden;">
+            <p class="card-text text-center mt-2 text-wrap mx-2" style="font-size: small;">{{i.name}}</p>
+        </div>
+      </div>
+    </div> 
+  </ng-container>
+
+  <ng-container *ngIf="id=='top_artists'" >
+    <div class="d-flex" *ngFor="let i of recomm_artists">
+      <div class="card d-flex align-items-center m-3 show-pointer" (click)="show_more_data($event,i.id)">
+        <div class="w-75 d-flex justify-content-center mt-3 position-relative music-image">
+            <img src={{i.images[0].url}} class="img-fluid img-shadow" alt="..." style="height: 120px; width: 120px; border-radius: 50%;">
+            <!-- <div class=" position-absolute bottom-0 end-0 mb-1 me-2 play-button" >
+              <button  class="card__btn card__btn-play ">
+                <i class="bi bi-play-fill"></i>
+              </button>
+          </div> -->
+        </div>
+        <div class="" style="overflow: hidden;">
+          <p class="card-text mt-2 mb-0 text-wrap mx-2 " style="font-size:medium;">{{i.name}}</p>
+          <p class=" text-capitalize text-center" style=" font-size: 12px;color: rgba(255, 255, 255, 0.658);">{{i.type}}</p>
+      </div>
+      </div>
+</div> 
+  </ng-container>
+</div>

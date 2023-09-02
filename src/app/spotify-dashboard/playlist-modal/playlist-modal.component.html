@@ -1,0 +1,13 @@
+<div class="loader-container" style="width: 75vw; height: 100%; " (click)="close()">
+<div class="conatainer p-3">
+    <p class="fs-5"> Select playlist </p>
+    <div class="d-flex my-3 show-pointer user-playlist" *ngFor="let i of playlist" style="width: 400px; height: 64px;" (click)="add_track($event,i)">
+        <div class="d-flex">
+            <img [src]="(i?.images?.[0]?.url)?i?.images?.[0]?.url:_musicService.defaultPlaylist" alt="cover image" height="64" width="64">
+        </div>
+        <div class="d-flex">
+            <span class="ps-2 pt-1 text-capitalize ">{{i.name}}</span>
+        </div>
+    </div>
+</div>
+</div>

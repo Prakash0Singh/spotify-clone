@@ -1,0 +1,42 @@
+<div class="conatiner d-flex justify-content-center flex-wrap" style="height:90%; overflow: scroll;">
+    <div class="d-flex w-100  justify-content-between pt-3 px-5">
+        <p class="fs-2 fw-semibold d-inline-block">Discography</p>
+        <!-- <p class="d-inline-block float-end showall mt-3" (click)="discography()">Show All</p> -->
+        <div class="d-flex justify-content-end">
+            <mat-form-field  style="height: 75px;">
+                <mat-select [(value)]="album_type" (selectionChange)="ablum_change($event.value)">
+                    <mat-option value="album,single,appears_on,compilation">All</mat-option>
+                    <mat-option value="album">Album</mat-option>
+                    <mat-option value="single,appears_on">Single & Appears_on</mat-option>
+                    <mat-option value="compilation">Compilation</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="d-flex" *ngFor="let i of album_collection">
+          <div class="card d-flex align-items-center m-3 show-pointer" (click)="show_more_data(i.id)">
+            <div class="w-75 d-flex justify-content-center mt-3 position-relative music-image">
+                <img src={{i.images[0].url}} class="img-fluid img-shadow" alt="..." style="height: 120px; width: 120px;">
+                <div class=" position-absolute bottom-0 end-0 mb-1 me-2 play-button">
+                  <button  class="card__btn card__btn-play " *ngIf="i.id!=isAlbum" (click)="play($event,i)">
+                    <i class="bi bi-play-fill"></i>
+                  </button>
+
+                  <button  class="card__btn card__btn-play" *ngIf="i.id==isAlbum && !resume_button " (click)="pause($event)" >
+                    <i class="bi bi-pause-fill"></i>
+                  </button>
+
+                  <button  class="card__btn card__btn-play" *ngIf=" i.id==isAlbum  && resume_button " (click)="resume($event)" >
+                    <i class="bi bi-play-fill text-warning"></i>
+                  </button>
+              </div>
+            </div>
+            <div class="" style="overflow: hidden;">
+              <p class="card-text mt-2 mb-0 mx-2 title-text " style="font-size:medium;">{{i.name}}</p>
+              <p class=" text-capitalize text-center" style=" font-size: 12px;color: rgba(255, 255, 255, 0.658);">{{i.type}}</p>
+          </div>
+          </div>
+    </div> 
+
+</div>

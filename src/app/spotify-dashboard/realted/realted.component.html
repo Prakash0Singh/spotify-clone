@@ -1,0 +1,25 @@
+<div class="conatiner d-flex justify-content-center flex-wrap" style="height:90%; overflow: scroll;">
+
+      <div class="d-flex" *ngFor="let i of recomm_artists">
+            <div class="card d-flex align-items-center m-3 show-pointer" (click)="show_more_data(i.id)">
+              <div class="w-75 d-flex justify-content-center mt-3 position-relative music-image">
+                  <img src={{i.images[0].url}} class="img-fluid img-shadow" alt="..." style="height: 120px; width: 120px; border-radius: 50%;">
+                  <div class=" position-absolute bottom-0 end-0 mb-1 me-2 play-button" >
+                    <button  class="card__btn card__btn-play ">
+                      <i class="bi bi-play-fill"></i>
+                    </button>
+                </div>
+                  <!-- <div class="position-absolute bottom-0 end-0 mb-1 me-2 " >
+                    <button  class="card__btn card__btn-play" >
+                      <i class="bi bi-pause-fill"></i>
+                    </button>
+                  </div> -->
+              </div>
+              <div class="" style="overflow: hidden;">
+                <p class="card-text mt-2 mb-0 text-wrap mx-2 " style="font-size:medium;">{{i.name}}</p>
+                <p class=" text-capitalize text-center" style=" font-size: 12px;color: rgba(255, 255, 255, 0.658);">{{i.type}}</p>
+            </div>
+            </div>
+      </div> 
+
+</div>

@@ -1,0 +1,50 @@
+.card{
+    border: none;
+    background-color: #181818;
+    color: white;
+    width: 11rem;
+    height: 12rem;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+.play-button{
+    display: none;
+}
+
+.music-image:hover  .play-button{
+    display: block;
+}
+.play-button:hover{
+    cursor: pointer;
+}
+.img-shadow{
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+.card__wrapper {
+    display: inline-block;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.card__btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+
+.card__btn-play {
+    width: 40px;
+    height: 40px;
+    background: var(--main-color);
+    border-radius: 50%;
+    display: flex;
+    background-color: #1db954;
+    justify-content: center;
+    align-items: center;
+}
+.title-text{
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
